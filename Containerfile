@@ -1,6 +1,8 @@
 # Allow build scripts to be referenced without being copied into the final image
-ARG COREOS_VERSION="stable"
+ARG COREOS_VERSION="${COREOS_VERSION:-stable}"
+ARG FEDORA_VERSION="${FEDORA_VERSION:-42}"
 ARG IMAGE_REGISTRY="${IMAGE_REGISTRY:-ghcr.io/ublue-os}"
+ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-coreos-stable}"
 ARG AKMODS_ZFS="${IMAGE_REGISTRY}/akmods-zfs:${KERNEL_FLAVOR}-${FEDORA_VERSION}"
 FROM ${AKMODS_ZFS} AS akmods-zfs
 
