@@ -12,7 +12,7 @@ depmod -a -v ${KERNEL_VERSION}
 
 dnf remove -y nfs-utils-coreos
 dnf5 install -y vim fzf butane cockpit cockpit-networkmanager cockpit-podman cockpit-selinux cockpit-system firewalld fwupd-efi intel-compute-runtime podman pv wireguard-tools hdparm man-db nfs-utils samba samba-usershares smartctl 
-dnf install cockpit-machines libvirt virt-install pciutils open-vm-tools virsh
+dnf install -y cockpit-machines libvirt virt-install pciutils open-vm-tools virsh
 
 # zfs
 # post install
