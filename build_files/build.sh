@@ -17,6 +17,7 @@ dnf install -y cockpit-machines libvirt virt-install pciutils open-vm-tools virs
 # zfs
 # post install
 systemctl enable podman.socket
+systemctl enable nfs-server.service
 systemctl disable coreos-oci-migration-motd.service
 systemctl disable docker.socket
 systemctl disable zincati.service
