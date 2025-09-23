@@ -1,24 +1,29 @@
 #!/bin/bash
-
 set -ouex pipefail
 
-### Install packages
-
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
-
 # this installs a package from fedora repos
-dnf5 install -y tmux 
+dnf remove -y nfs-utils-coreos
+dnf5 install -y tmux cockpit-networkmanager cockpit-podman cockpit-selinux cockpit-system firewalld fwupd-efi intel-compute-runtime open-vm-tools podman pv wireguard-tools hdparm man-db nfs-utils samba samba-usershares smartctl cockpit-machines libvirt virt-install pciutils
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+# zfs
+dnf -y install /tmp/rpms/akmods-zfs/kmods/zfs/*.rpm /tmp/rpms/akmods-zfs/kmods/zfs/other/zfs-dracut-*.rpm
+depmod -a -v ${KERNEL_VERSION}
 
-#### Example for enabling a System Unit File
-
+# post install
 systemctl enable podman.socket
+systemctl disable coreos-oci-migration-motd.service
+systemctl disable docker.socket
+systemctl disable zincati.service
+
+cp -a /etc/firewalld/firewalld-server.conf /etc/firewalld/firewalld.conf
+
+# cleanup
+rm -rf /tmp/* || true
+find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
+find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
+
+# this currently fails on /usr/etc and /var/cache
+#bootc container lint
+ostree container commit
+mkdir -p /var/tmp \
+&& chmod -R 1777 /var/tmp
