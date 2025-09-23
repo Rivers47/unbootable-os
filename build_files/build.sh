@@ -1,14 +1,19 @@
 #!/bin/bash
 set -ouex pipefail
+ARCH="$(rpm -E %{_arch})"
+RELEASE="$(rpm -E %fedora)"
 
+pushd /tmp/rpms/kernel
+KERNEL_VERSION=$(find kernel-*.rpm | grep -P "kernel-(\d+\.\d+\.\d+)-.*\.fc${RELEASE}\.${ARCH}" | sed -E 's/kernel-//' | sed -E 's/\.rpm//')
+popd
 # this installs a package from fedora repos
+dnf -y install /tmp/rpms/akmods-zfs/kmods/zfs/*.rpm /tmp/rpms/akmods-zfs/kmods/zfs/other/zfs-dracut-*.rpm
+depmod -a -v ${KERNEL_VERSION}
+
 dnf remove -y nfs-utils-coreos
 dnf5 install -y tmux cockpit-networkmanager cockpit-podman cockpit-selinux cockpit-system firewalld fwupd-efi intel-compute-runtime open-vm-tools podman pv wireguard-tools hdparm man-db nfs-utils samba samba-usershares smartctl cockpit-machines libvirt virt-install pciutils
 
 # zfs
-dnf -y install /tmp/rpms/akmods-zfs/kmods/zfs/*.rpm /tmp/rpms/akmods-zfs/kmods/zfs/other/zfs-dracut-*.rpm
-depmod -a -v ${KERNEL_VERSION}
-
 # post install
 systemctl enable podman.socket
 systemctl disable coreos-oci-migration-motd.service
