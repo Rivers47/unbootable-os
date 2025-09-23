@@ -11,7 +11,8 @@ dnf -y install /tmp/rpms/akmods-zfs/kmods/zfs/*.rpm /tmp/rpms/akmods-zfs/kmods/z
 depmod -a -v ${KERNEL_VERSION}
 
 dnf remove -y nfs-utils-coreos
-dnf5 install -y tmux htop cockpit cockpit-networkmanager cockpit-podman cockpit-selinux cockpit-system firewalld fwupd-efi intel-compute-runtime open-vm-tools podman pv wireguard-tools hdparm man-db nfs-utils samba samba-usershares smartctl cockpit-machines libvirt virt-install pciutils
+dnf5 install -y cockpit cockpit-networkmanager cockpit-podman cockpit-selinux cockpit-system firewalld fwupd-efi intel-compute-runtime podman pv wireguard-tools hdparm man-db nfs-utils samba samba-usershares smartctl 
+#dnf install cockpit-machines libvirt virt-install pciutils open-vm-tools
 
 # zfs
 # post install
