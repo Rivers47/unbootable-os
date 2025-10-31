@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euxo pipefail
 dnf install -y vim fzf butane cockpit htop zoxide bfs
 
 curl --output /tmp/7z.tar.xz https://www.7-zip.org/a/7z2501-linux-x64.tar.xz
